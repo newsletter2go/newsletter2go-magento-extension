@@ -13,12 +13,56 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
                 $value = $attribute->getFrontend()->getValue($product);
 
                 if (is_string($value) && strlen($value)) {
-                    $data[$attribute->getAttributeCode().'_label'] =  $attribute->getStoreLabel();
-                    $data[$attribute->getAttributeCode().'_value'] =  $value;
+                    $data[$attribute->getAttributeCode() . '_label'] = $attribute->getStoreLabel();
+                    $data[$attribute->getAttributeCode() . '_value'] = $value;
 
                 }
             }
         }
+    }
+
+    /**
+     * Retrieves list of item attributes
+     */
+    public function _retrieve()
+    {
+        /** @var Mage_Catalog_Model_Product $productModel */
+        $productModel = Mage::getModel('catalog/product');
+        $attributes = $productModel->getAttributes();
+        $attributeArray = array();
+
+        /** @var Mage_Catalog_Model_Resource_Eav_Attribute $a */
+        foreach ($attributes as $a) {
+            /** @var Mage_Eav_Model_Entity_Type $entityType */
+            $entityType = $a->getEntityType();
+            foreach ($entityType->getAttributeCodes() as $attributeName) {
+                /** @var Mage_Eav_Model_Entity_Attribute $attribute */
+                $attribute = Mage::getModel('eav/entity_attribute')->loadByCode('catalog_product', $attributeName);
+                switch ($attribute->getFrontendInput()) {
+                    case 'price':
+                        $type = 'Float';
+                        break;
+                    case 'gallery':
+                        $type = 'Array';
+                        break;
+                    case 'date':
+                        $type = 'Date';
+                        break;
+                    default:
+                        $type = 'String';
+                        break;
+                }
+
+                $attributeArray[] = array(
+                    'name' => $attributeName,
+                    'type' => $type,
+                );
+            }
+
+            break;
+        }
+
+        return array('items' => $attributeArray);
     }
 
     /**
@@ -37,7 +81,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
 
             $storeId = Mage::getModel('core/store')->load($storeCode, 'code')->getId();
             $model->setStoreId($storeId);
-            $add_store = '?___store='.$storeCode;
+            $add_store = '?___store=' . $storeCode;
         } else {
             $storeId = Mage::app()
                 ->getWebsite()
@@ -53,13 +97,13 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
             $_product = $model->load($id); //getting product object for particular product id
         }
 
-        if (!$_product || !$_product->getId()){// !isset($_product->getData()['sku'])) {
+        if (!$_product || !$_product->getId()) {// !isset($_product->getData()['sku'])) {
             $_product = $model->loadByAttribute('sku', $id);
             // return array('error' => 'int-0-600', 'message' => serialize($_product->getData()));
 
         }
 
-        if (!$_product || !$_product->getId()){// !isset($_product->getData()['sku'])) {
+        if (!$_product || !$_product->getId()) {// !isset($_product->getData()['sku'])) {
 
             return array('error' => 'int-0-600', 'message' => 'product not found');
         }
@@ -69,9 +113,9 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
         $this->getAdditionalData($_product, $p);
 
         $p['product_url_1'] = $_product->getUrlPath();
-        if(strlen($add_store) > 0){
-            if(strpos( $p['product_url_1'] , $add_store) === false){
-                $p['product_url_1'] =  $p['product_url_1'] .$add_store;
+        if (strlen($add_store) > 0) {
+            if (strpos($p['product_url_1'], $add_store) === false) {
+                $p['product_url_1'] = $p['product_url_1'] . $add_store;
             }
         }
         $p['product_url_2'] = $_product->getProductUrl();
@@ -87,7 +131,5 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
 
         return array('items' => array($p));
     }
-
-
 
 }

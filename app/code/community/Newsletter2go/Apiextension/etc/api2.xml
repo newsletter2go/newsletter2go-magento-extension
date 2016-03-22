@@ -146,6 +146,10 @@
                          <route>/n2go/item/:id</route>
                          <action_type>collection</action_type>
                      </route_collection>
+                     <route_entity>
+                         <route>/n2go/fields/item</route>
+                         <action_type>entity</action_type>
+                     </route_entity>
                  </routes>
                  <versions>1</versions>
              </subscriber_item>
