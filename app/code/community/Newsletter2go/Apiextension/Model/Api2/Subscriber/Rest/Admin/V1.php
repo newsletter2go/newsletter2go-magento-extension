@@ -20,6 +20,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
         $offset = $this->getRequest()->getParam('offset');
         $email_str = $this->getRequest()->getParam('emails');
         $debug = $this->getRequest()->getParam('debug');
+        $storeId = $this->getRequest()->getParam('storeId');
         $emails = null;
 
         try {
@@ -68,6 +69,10 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
             if ($hours && is_numeric($hours)) {
                 $ts = date('Y-m-d H:i:s', time() - 3600 * $hours);
                 $collection->addAttributeToFilter('updated_at', array('gteq' => $ts));
+            }
+
+            if($storeId !== null){
+                $collection->addAttributeToFilter('store_id', $storeId);
             }
 
             $collection->addAttributeToSelect($fieldsCond['custom']);
