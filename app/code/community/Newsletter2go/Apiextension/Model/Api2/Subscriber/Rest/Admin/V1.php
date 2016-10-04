@@ -85,6 +85,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
             $customers = $collection->load()->toArray($fields);
 
             foreach ($customers as &$customer) {
+                $customer = $this->getSelectValues($customer);
                 if (isset($customer['default_shipping'])) {
                     $customer['default_shipping'] =
                         json_encode(Mage::getModel('customer/address')->load($customer['default_shipping'])->toArray());
@@ -228,5 +229,30 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
         $customers = $collection->load()->toArray(strlen($fields) > 0 ? explode(',', $fields) : $fields);
 
         return $customers;
+    }
+
+    /**
+     * This method replaces option id's with actual values for select and multi select field input types.
+     *
+     * @param Values of fields for a single Customer $customer
+     * @return Values of fields for a single Customer with values of custom fields
+     */
+    private function getSelectValues ($customer){
+
+        foreach ($customer as $key => $value){
+            $read = Mage::getSingleton('core/resource')->getConnection('core_read');
+            $query = "SELECT * FROM eav_attribute WHERE attribute_code='". $key ."' AND frontend_input IN ('multiselect','select') AND is_user_defined = 1;";
+            $row = $read->fetchAll($query);
+            if (isset($row) && !empty($row)) {
+                $query = "SELECT value FROM eav_attribute_option_value WHERE option_id IN (" . $value . ");";
+                $values = $read->fetchAll($query);
+                $customer[$key] = null;
+                foreach ($values as $data) {
+                    $customer[$key][] =  $data['value'];
+                }
+                $customer[$key] = implode(", ", $customer[$key]);
+            }
+        }
+        return $customer;
     }
 }
