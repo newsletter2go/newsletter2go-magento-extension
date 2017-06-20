@@ -3,7 +3,7 @@
 <config>
     <modules>
         <Newsletter2go_Apiextension>
-            <version>3.1.08</version>
+            <version>4.0.00</version>
         </Newsletter2go_Apiextension>
     </modules>
     <global>
@@ -12,5 +12,76 @@
                 <class>Newsletter2go_Apiextension_Model</class>
             </apiextension>
         </models>
+        <helpers>
+            <apiextension>
+                <class>Newsletter2go_Apiextension_Helper</class>
+            </apiextension>
+        </helpers>
+        <blocks>
+            <apiextension>
+                <class>Newsletter2go_Apiextension_Block</class>
+            </apiextension>
+        </blocks>
     </global>
+    <frontend>
+        <routers>
+            <newsletter2go>
+                <use>standard</use>
+                <args>
+                    <module>Newsletter2go_Apiextension</module>
+                    <frontName>newsletter2go</frontName>
+                </args>
+            </newsletter2go>
+        </routers>
+        <events>
+            <checkout_onepage_controller_success_action>
+                <observers>
+                    <newsletter2go_apiextension_complete_order>
+                        <type>singleton</type>
+                        <class>Newsletter2go_Apiextension_Model_Observer</class>
+                        <method>trackBuy</method>
+                    </newsletter2go_apiextension_complete_order>
+                </observers>
+            </checkout_onepage_controller_success_action>
+        </events>
+        <layout>
+            <updates>
+                <apiextension module="Newsletter2go_Apiextension">
+                    <file>newsletter2go_apiextension.xml</file>
+                </apiextension>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <newsletter2go after="Mage_Adminhtml">Newsletter2go_Apiextension</newsletter2go>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <newsletter2go>
+                                            <title>Newsletter2Go</title>
+                                        </newsletter2go>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
 </config>

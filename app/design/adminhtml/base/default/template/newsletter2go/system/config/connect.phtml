@@ -1,0 +1,23 @@
+<script type="text/javascript">
+    function n2go_connect() {
+        var form = document.createElement("form"),
+            input = document.createElement("input"),
+            object = <?php echo $this->getConnectUrlParams(); ?>;
+
+        form.method = "get";
+        form.action = "<?php echo $this->getConnectUrl(); ?>";
+        form.target = "_blank";
+
+        for (var property in object) {
+            if (object.hasOwnProperty(property)) {
+                input.setAttribute('name', property);
+                input.setAttribute('value', object[property]);
+                form.appendChild(input.cloneNode(true));
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+<?php echo $this->getButtonHtml() ?> 
