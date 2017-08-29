@@ -7,16 +7,155 @@
     <channel>community</channel>
     <extends/>
     <summary>Synchronizes your Magento newsletter subscribers, sales figures and shop items with Newsletter2Go</summary>
-    <description>The Newsletter2Go email marketing software Extension for Magento automatically synchronizes all newsletter subscribers, including basic data like name and gender as well as the total amount of sales and average sale.&amp;amp;#xD;&amp;#xD;&#xD;
-Additionally, you can easily retrieve all item data including description, price info, product images and product link just by inputting the item id in the Newsletter2Go software.&amp;lt;/description&amp;gt;&amp;#xD;&#xD;
-    &amp;lt;notes&amp;gt;new features for magento-integration in Newsletter2Go-system</description>
+    <description>The Newsletter2Go email marketing software Extension for Magento automatically synchronizes all
+        newsletter subscribers, including basic data like name and gender as well as the total amount of sales and
+        average sale.&amp;amp;#xD;&amp;#xD;&#xD;
+        Additionally, you can easily retrieve all item data including description, price info, product images and
+        product link just by inputting the item id in the Newsletter2Go software.&amp;lt;/description&amp;gt;&amp;#xD;&#xD;
+        &amp;lt;notes&amp;gt;new features for magento-integration in Newsletter2Go-system
+    </description>
     <notes>- Adding config page and connect button, implementing tracking option&#xD;
-- compability to enterprise version&amp;#xD;&#xD;
-- bugifxes</notes>
-    <authors><author><name>Newsletter2Go</name><user>Newsletter2Go</user><email>info@newsletter2go.de</email></author></authors>
+        - compability to enterprise version&amp;#xD;&#xD;
+        - bugifxes
+    </notes>
+    <authors>
+        <author>
+            <name>Newsletter2Go</name>
+            <user>Newsletter2Go</user>
+            <email>info@newsletter2go.de</email>
+        </author>
+    </authors>
     <date>2017-06-13</date>
     <time>12:39:09</time>
-    <contents><target name="magecommunity"><dir name="Newsletter2go"><dir name="Apiextension"><dir name="Block"><dir name="Field"><file name="Connect.php" hash="251e43ed0d921fd4af7a9a5031f41711"/></dir><file name="Head.php" hash="b9f8f46f7c78870b7fb20d45f93eb313"/></dir><dir name="controllers"><file name="CallbackController.php" hash="49aec4c1308e4cbe0d15fbf1716a1b55"/></dir></dir></dir></target><target name="magelocal"><dir name="Newsletter2go"><dir name="Apiextension"><dir name="etc"><file name="adminhtml.xml" hash=""/><file name="api2.xml" hash=""/><file name="config.xml" hash=""/><file name="system.xml" hash=""/></dir><dir name="Helper"><file name="Data.php" hash=""/></dir><dir name="Model"><dir name="Api2"><dir name="Subscriber"><dir name="Fields"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash=""/></dir></dir></dir><dir name="Group"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash=""/></dir></dir></dir><dir name="Item"><dir name="Rest"><dir name="Admin"><file name="V1.php" hash=""/></dir></dir></dir><dir name="Store"><dir name="Admin"><file name="V1.php" hash=""/></dir></dir><dir name="Version"><dir name="Admin"><file name="V1.php" hash=""/></dir></dir><file name="Fields.php" hash=""/><file name="Group.php" hash=""/><file name="Item.php" hash=""/><file name="Store.php" hash=""/><file name="Version.php" hash=""/></dir><file name="Subscriber.php" hash=""/></dir><dir name="System"><dir name="Config"><dir name="Source"><file name="TrackBuy.php" hash=""/></dir></dir></dir><file name="Observer.php" hash=""/></dir></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="base"><dir name="default"><dir name="template"><dir name="newsletter2go"><dir name="system"><dir name="config"><file name="connect.phtml" hash="ce1a2d55c5d2bf526c6fff5b48cc300d"/></dir></dir></dir></dir></dir></dir></dir><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="newsletter2go_apiextension.xml" hash="0f47d6055133c27f2215486c3ca37248"/></dir><dir name="template"><dir name="newsletter2go"><file name="head.phtml" hash="3a0ee1680d6839adbaeb322e874641ef"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Newsletter2go_Apiextension.xml" hash="9fb360ff7d461dc43049b61ec3869cf5"/></dir></target></contents>
+    <contents>
+        <target name="magecommunity">
+            <dir name="Newsletter2go">
+                <dir name="Apiextension">
+                    <dir name="Block">
+                        <dir name="Field">
+                            <file name="Connect.php" hash="251e43ed0d921fd4af7a9a5031f41711"/>
+                        </dir>
+                        <file name="Head.php" hash="2d750fa7ebae71109fb6880cd183ed1c"/>
+                    </dir>
+                    <dir name="Helper">
+                        <file name="Data.php" hash="55703be8c033b59f52f5bb5d04c6f41c"/>
+                    </dir>
+                    <dir name="Model">
+                        <dir name="Api2">
+                            <dir name="Subscriber">
+                                <dir name="Fields">
+                                    <dir name="Rest">
+                                        <dir name="Admin">
+                                            <file name="V1.php" hash="eb4a1e9b377ae6498042086c2c71d928"/>
+                                        </dir>
+                                    </dir>
+                                </dir>
+                                <file name="Fields.php" hash="80bee780a76c3107c290289677e7834e"/>
+                                <dir name="Group">
+                                    <dir name="Rest">
+                                        <dir name="Admin">
+                                            <file name="V1.php" hash="6a1ce32607369a934751215f28c48dfc"/>
+                                        </dir>
+                                    </dir>
+                                </dir>
+                                <file name="Group.php" hash="fdb1e62b00cce413b3a195bc5c681dd4"/>
+                                <dir name="Item">
+                                    <dir name="Rest">
+                                        <dir name="Admin">
+                                            <file name="V1.php" hash="7b09175db80f65e774a37e24b5bf318d"/>
+                                        </dir>
+                                    </dir>
+                                </dir>
+                                <file name="Item.php" hash="7bd21cd8350563e44cd20062a537b766"/>
+                                <dir name="Rest">
+                                    <dir name="Admin">
+                                        <file name="V1.php" hash="4ec661fa8a0ba6d0f8d3c577c4987e44"/>
+                                    </dir>
+                                </dir>
+                                <dir name="Store">
+                                    <dir name="Rest">
+                                        <dir name="Admin">
+                                            <file name="V1.php" hash="e55622a0a19a16f7ff1754aba6fa9d65"/>
+                                        </dir>
+                                    </dir>
+                                </dir>
+                                <file name="Store.php" hash="dea1d81fa30706d3c12872830b4bf7f0"/>
+                                <dir name="Version">
+                                    <dir name="Rest">
+                                        <dir name="Admin">
+                                            <file name="V1.php" hash="7d68bcda53de6d2cf47b942564ea726b"/>
+                                        </dir>
+                                    </dir>
+                                </dir>
+                                <file name="Version.php" hash="bb292a0d124bfe3128b39ae7c57104de"/>
+                            </dir>
+                            <file name="Subscriber.php" hash="7ced7ea3fd9b9d1f68f1d98c5a41b54a"/>
+                        </dir>
+                        <file name="Observer.php" hash="3463ef12e10d345ed9d4d791732c621b"/>
+                        <dir name="System">
+                            <dir name="Config">
+                                <dir name="Source">
+                                    <file name="TrackBuy.php" hash="120f52d72ad0f07978eee2c26d6eee97"/>
+                                </dir>
+                            </dir>
+                        </dir>
+                    </dir>
+                    <dir name="controllers">
+                        <file name="CallbackController.php" hash="49aec4c1308e4cbe0d15fbf1716a1b55"/>
+                    </dir>
+                    <dir name="etc">
+                        <file name="adminhtml.xml" hash="f75e9b2e6b88522e70fe6619d1da029f"/>
+                        <file name="api2.xml" hash="971453046e9b76e2514e6725f36d9c7a"/>
+                        <file name="config.xml" hash="69b96c2cba7228b6ab5f2bfd7f405b8d"/>
+                        <file name="system.xml" hash="2c29da36a7310950b8438cd26cca8507"/>
+                    </dir>
+                </dir>
+            </dir>
+        </target>
+        <target name="magedesign">
+            <dir name="adminhtml">
+                <dir name="base">
+                    <dir name="default">
+                        <dir name="template">
+                            <dir name="newsletter2go">
+                                <dir name="system">
+                                    <dir name="config">
+                                        <file name="connect.phtml" hash="ce1a2d55c5d2bf526c6fff5b48cc300d"/>
+                                    </dir>
+                                </dir>
+                            </dir>
+                        </dir>
+                    </dir>
+                </dir>
+            </dir>
+            <dir name="frontend">
+                <dir name="base">
+                    <dir name="default">
+                        <dir name="template">
+                            <dir name="newsletter2go">
+                                <file name="head.phtml" hash="3a0ee1680d6839adbaeb322e874641ef"/>
+                            </dir>
+                        </dir>
+                        <dir name="layout">
+                            <file name="newsletter2go_apiextension.xml" hash="0f47d6055133c27f2215486c3ca37248"/>
+                        </dir>
+                    </dir>
+                </dir>
+            </dir>
+        </target>
+        <target name="mageetc">
+            <dir name="modules">
+                <file name="Newsletter2go_Apiextension.xml" hash="9fb360ff7d461dc43049b61ec3869cf5"/>
+            </dir>
+        </target>
+    </contents>
     <compatible/>
-    <dependencies><required><php><min>5.3.00</min><max>6.0.00</max></php></required></dependencies>
+    <dependencies>
+        <required>
+            <php>
+                <min>5.3.0</min>
+                <max>7.1.0</max>
+            </php>
+        </required>
+    </dependencies>
 </package>
