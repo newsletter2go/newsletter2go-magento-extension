@@ -3,7 +3,7 @@
 class Newsletter2go_Apiextension_Block_Field_Connect extends Mage_Adminhtml_Block_System_Config_Form_Field
 {
 
-    CONST N2GO_CONNECT_URL = 'https://ui-sandbox.newsletter2go.com/integrations/connect/MAG/';
+    CONST N2GO_CONNECT_URL = 'https://ui.newsletter2go.com/integrations/connect/MAG/';
 
     /**
      * Set template
