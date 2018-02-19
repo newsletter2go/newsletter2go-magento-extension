@@ -33,7 +33,7 @@ class Newsletter2go_Apiextension_CallbackController extends Mage_Core_Controller
         $authKey = $this->getRequest()->getParam('auth_key');
         $accessToken = $this->getRequest()->getParam('access_token');
         $refreshToken = $this->getRequest()->getParam('refresh_token');
-        $companyId = $this->getRequest()->getParam('int_id');
+        $companyId = $this->getRequest()->getParam('company_id');
 
         if (isset($authKey)) {
             Mage::getModel('core/config')->saveConfig(
