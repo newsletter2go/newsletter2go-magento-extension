@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>NL2go_Sync</name>
-    <version>4.0.00</version>
+    <version>3.2.04</version>
     <stability>stable</stability>
     <license>GPL</license>
     <channel>community</channel>
