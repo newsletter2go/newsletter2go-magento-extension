@@ -2,11 +2,17 @@
 
 class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends Newsletter2go_Apiextension_Model_Api2_Subscriber
 {
+    /**
+     * @var array 
+     */
+    private $attributeCache = array();
 
     /**
      * Retrieve list of customers.
      *
      * @return array
+     *
+     * @throws Exception
      */
     protected function _retrieveCollection()
     {
@@ -28,8 +34,9 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
                 $emails = explode(',', $email_str);
             }
 
-            if ($group == 'subscribers-only') {
+            if ($group === 'subscribers-only') {
                 $subscribers = $this->getSubscribersOnly($subscribed, $limit, $offset, $fields, $emails);
+
                 return array('items' => array($subscribers['items']));
             }
 
@@ -47,8 +54,11 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
             //Join with subscribers
             if ($subscribed || !empty($fieldsCond['subs'])) {
                 $collection->getSelect()
-                    ->joinLeft($prefix . 'newsletter_subscriber',
-                        'e.entity_id =' . $prefix . 'newsletter_subscriber.customer_id', $fieldsCond['subs'])
+                    ->joinLeft(
+                        $prefix . 'newsletter_subscriber',
+                        'e.entity_id =' . $prefix . 'newsletter_subscriber.customer_id',
+                        $fieldsCond['subs']
+                    )
                     ->where($subscribedCond);
             }
 
@@ -71,7 +81,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
                 $collection->addAttributeToFilter('updated_at', array('gteq' => $ts));
             }
 
-            if($storeId !== null){
+            if ($storeId !== null) {
                 $collection->addAttributeToFilter('store_id', $storeId);
             }
 
@@ -83,6 +93,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
             }
 
             $customers = $collection->load()->toArray($fields);
+            $this->buildAttributesCache();
 
             foreach ($customers as &$customer) {
                 $customer = $this->getSelectValues($customer);
@@ -98,20 +109,21 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
             }
 
             return array('items' => array($customers));
-        }catch(Exception $e){
-            if($debug == 1){
-                echo $e->getMessage();
-                echo $e->getTraceAsString();
-                die();
-            }else{
-                return array('errorcode'=> 'int-0-600', 'message' => 'an error occurred: '. $e->getMessage() );
+        } catch (Exception $ex) {
+            if ($debug == 1) {
+                die($ex);
             }
+
+            return ['errorcode' => 'int-0-600', 'message' => 'an error occurred: ' . $ex->getMessage()];
         }
     }
 
     /**
      * @param array $data
+     *
      * @return string
+     *
+     * @throws Exception
      */
     protected function _update($data)
     {
@@ -202,6 +214,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
      * @param $offset
      * @param $fields
      * @param $emails
+     *
      * @return array
      */
     private function getSubscribersOnly($subscribed, $limit, $offset, $fields, $emails)
@@ -214,7 +227,10 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
         $collection->addFieldToSelect('subscriber_status');
 
         if ($subscribed) {
-            $collection->addFieldToFilter('main_table.subscriber_status', Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED);
+            $collection->addFieldToFilter(
+                'main_table.subscriber_status',
+                Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED
+            );
         }
 
         if (!empty($emails)) {
@@ -234,25 +250,46 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
     /**
      * This method replaces option id's with actual values for select and multi select field input types.
      *
-     * @param Values of fields for a single Customer $customer
-     * @return Values of fields for a single Customer with values of custom fields
+     * @param array $customer Values of fields for a single Customer $customer
+     *
+     * @return array Values of fields for a single Customer with values of custom fields
      */
-    private function getSelectValues ($customer){
+    private function getSelectValues($customer)
+    {
+        foreach ($customer as $key => $value) {
+            if (!array_key_exists($key, $this->attributeCache)) {
+                continue;
+            }
 
-        foreach ($customer as $key => $value){
-            $read = Mage::getSingleton('core/resource')->getConnection('core_read');
-            $query = "SELECT * FROM eav_attribute WHERE attribute_code='". $key ."' AND frontend_input IN ('multiselect','select') AND is_user_defined = 1;";
-            $row = $read->fetchAll($query);
-            if (isset($row) && !empty($row)) {
-                $query = "SELECT value FROM eav_attribute_option_value WHERE option_id IN (" . $value . ");";
-                $values = $read->fetchAll($query);
-                $customer[$key] = null;
-                foreach ($values as $data) {
-                    $customer[$key][] =  $data['value'];
-                }
-                $customer[$key] = implode(", ", $customer[$key]);
+            if (is_array($value)) {
+                $customer[$key] = implode(', ', array_values($this->attributeCache[$key]));
+            } else {
+                $customer[$key] = $this->attributeCache[$key][$value];
             }
         }
+
         return $customer;
+    }
+
+    /**
+     * Builds attribute cache with value label pairs
+     */
+    private function buildAttributesCache()
+    {
+        /** @var Mage_Customer_Model_Resource_Attribute_Collection $attributes */
+        $attributes = Mage::getResourceModel('customer/attribute_collection');
+        $attributes->addFieldToFilter('frontend_input', array('in' => array('multiselect', 'select')));
+        $attributes->addFieldToFilter('is_user_defined', 1);
+        $items = $attributes->getItems();
+
+        /** @var Mage_Customer_Model_Attribute $attribute */
+        foreach ($items as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $attributeInfo = Mage::getModel('eav/entity_attribute')->loadByCode('customer', $attributeCode);
+
+            $options = $attributeInfo->getSource()->getAllOptions(false);
+
+            $this->attributeCache[$attributeCode] = array_column($options, 'label', 'value');
+        }
     }
 }

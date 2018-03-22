@@ -88,7 +88,6 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
                 ->getDefaultGroup()
                 ->getDefaultStoreId();
             $model->setStoreId($storeId);
-
         }
 
         $_product = false;
@@ -122,12 +121,15 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Item_Rest_Admin_V1 extend
 
         $p['product_url_3'] = $_product->getUrlInStore();
 
-        if (isset($p['price']))
-            $p['price'] = number_format(floatval($p['price']), 2);
-        if (isset($p['special_price']))
-            $p['special_price'] = number_format(floatval($p['special_price']), 2);
-        if (isset($p['msrp']))
-            $p['msrp'] = number_format(floatval($p['msrp']), 2);
+        if (isset($p['price'])) {
+            $p['price'] = number_format((float)$p['price'], 2);
+        }
+        if (isset($p['special_price'])) {
+            $p['special_price'] = number_format((float)$p['special_price'], 2);
+        }
+        if (isset($p['msrp'])) {
+            $p['msrp'] = number_format((float)$p['msrp'], 2);
+        }
 
         return array('items' => array($p));
     }

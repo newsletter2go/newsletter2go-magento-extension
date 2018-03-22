@@ -1,10 +1,11 @@
-version = 0_0_00
+version = $(subst .,_,${shell grep -oP '(?<=<version>).*?(?=</version>)' package.php})
 
-version_dots= $(subst _,.,$(version))
-outfile = NL2go_Sync-$(version_dots).tgz
+outfile = Magento_nl2go_$(version).tgz
 
 $(outfile):
-	tar  -P -cvzf  build.tgz app/* package.xml
+	php package.php
+	tar -P -cvzf  build.tgz app/* package.xml
+	rm package.xml
 	mv build.tgz $(outfile)
 
 clean:

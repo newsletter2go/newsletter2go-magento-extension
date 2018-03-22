@@ -19,7 +19,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Group_Rest_Admin_V1 exten
         $groups = Mage::getModel('customer/group')->getCollection()->toArray();
         
         foreach ($groups['items'] as $group) {
-            $customersCount = $collection = Mage::getResourceModel('customer/customer_collection')
+            $customers = Mage::getResourceModel('customer/customer_collection')
                     ->addAttributeToSelect('entity_id')
                     ->addAttributeToFilter('group_id', $group['customer_group_id'])
                     ->load()->toArray();
@@ -28,7 +28,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Group_Rest_Admin_V1 exten
                 'id' => $group['customer_group_id'],
                 'name' => $group['customer_group_code'],
                 'description' => '',
-                'count' => count($customersCount),
+                'count' => count($customers),
             );
         }
 
