@@ -35,7 +35,7 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
             }
 
             if ($group === 'subscribers-only') {
-                $subscribers = $this->getSubscribersOnly($subscribed, $limit, $offset, $fields, $emails);
+                $subscribers = $this->getSubscribersOnly($subscribed, $storeId, $limit, $offset, $fields, $emails);
 
                 return array('items' => array($subscribers['items']));
             }
@@ -217,13 +217,13 @@ class Newsletter2go_Apiextension_Model_Api2_Subscriber_Rest_Admin_V1 extends New
      *
      * @return array
      */
-    private function getSubscribersOnly($subscribed, $limit, $offset, $fields, $emails)
+    private function getSubscribersOnly($subscribed, $storeId, $limit, $offset, $fields, $emails)
     {
         /** @var Mage_Newsletter_Model_Resource_Subscriber_Collection $collection */
         $collection = Mage::getResourceModel('newsletter/subscriber_collection');
         $collection->addFieldToFilter('main_table.customer_id', 0);
         $collection->addFieldToSelect('subscriber_email', 'email');
-        $collection->addFieldToSelect('store_id');
+        $collection->addFieldToSelect('store_id', $storeId);
         $collection->addFieldToSelect('subscriber_status');
 
         if ($subscribed) {
