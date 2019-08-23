@@ -33,7 +33,7 @@ class Newsletter2go_Apiextension_Block_Field_Connect extends Mage_Adminhtml_Bloc
     public function getConnectUrlParams()
     {
         $params = array();
-        $params['version'] = '3100';
+        $params['version'] = '3200';
         $params['url'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
         $params['adminUrl'] = Mage::getUrl('adminhtml');
 
